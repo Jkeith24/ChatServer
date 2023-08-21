@@ -1,0 +1,21 @@
+A user has connected!
+$register Joshua
+you are registered and can now send messages!!
+A user has connected!
+$register again
+you are registered and can now send messages!!
+A user has connected!
+$register wweewewe
+you are registered and can now send messages!!
+SV_FULL
+wweewewe: I am DOne
+again: wow you're so smart
+Joshua: Nah he is dumb. Big brother helped him 
+Joshua: don't let him lie
+Joshua: to you
+wweewewe: ah shutup Joshua
+wweewewe: you know nothing
+again: You two are unbelievable
+Joshua has disconnected!
+wweewewe has disconnected!
+again has disconnected!

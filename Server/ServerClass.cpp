@@ -1,5 +1,7 @@
 #include "ServerClass.h"
 
+
+
 int ServerClass::TCPInit(uint16_t port)
 {
 
@@ -29,7 +31,7 @@ int ServerClass::TCPInit(uint16_t port)
 		return SOCKET_ERROR;
 	}
 
-	
+	TCPServerSocket = listenSocket;
 	
 	return listenSocket;
 
@@ -65,7 +67,7 @@ int ServerClass::UDPInit(uint16_t port)
 	{
 		
 		int bytesSent = sendto(UDPSocket, messageToSend.c_str(), static_cast<int>(messageToSend.length()), 0, (struct sockaddr*)&broadcastAddr, sizeof(broadcastAddr));
-		//std::this_thread::sleep_for(std::chrono::seconds(1));		
+		std::this_thread::sleep_for(std::chrono::seconds(1));		
 	}
 		
 	shutdown(UDPSocket, 2);
@@ -99,6 +101,60 @@ bool ServerClass::parseRegisterCommand(const std::string& message, std::string &
 
 	return false;
 }
+
+bool ServerClass::parseGetListCommand(const std::string& message)
+{
+	std::string prefix = "$getlist";
+
+	if (message.find(prefix) == 0)
+	{
+		//could do logic here but did it after returning true
+		
+		return true;
+	}
+
+
+	return false;
+}
+
+
+
+bool ServerClass::parseGetLogCommand(const std::string& message)
+{	
+	std::ifstream stream("ServerLog.txt");
+		std::string prefix = "$getlog";
+
+		if (message.find(prefix) == 0)
+		{
+			
+			if (stream.is_open())
+			{
+				int bufferSize = 0;
+				char buffer[255];
+
+				while (!stream.eof())
+				{
+					stream.getline(buffer, 255);
+					
+					std::streamsize bytesRead = stream.gcount();
+
+
+					uint32_t size = bytesRead + 1;		
+					sendMessage(TCPServerSocket, buffer, size);			//I don't know why I am failing sending messages. Socket error -1
+							
+				}
+
+				stream.close();
+				return true;
+			}
+
+
+		}
+
+		stream.close();
+		return false;
+}
+
 
 
 int ServerClass::readMessage(SOCKET _socket ,char* buffer, int32_t size)
@@ -178,7 +234,7 @@ int ServerClass::sendMessage(SOCKET _socket, char* data, int32_t length)
 		return PARAMETER_ERROR;
 	}
 
-	uint8_t size = length;
+	uint32_t size = length;
 	char* sendBuffer = new char[size];
 
 	memset(sendBuffer, 0, length);

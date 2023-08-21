@@ -25,6 +25,8 @@ public:
 	int UDPInit(uint16_t port);
 
 	bool parseRegisterCommand(const std::string& message, std::string& username);
+	bool parseGetListCommand(const std::string& message);
+	bool parseGetLogCommand(const std::string& message);
 	bool runSockets = true;
 
 	int readMessage(SOCKET _socket, char* buffer, int32_t size);
